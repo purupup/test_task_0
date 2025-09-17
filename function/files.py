@@ -5,7 +5,7 @@ async def combining_files(files, output_file=str('./out.csv')) -> str:
 
     with open(output_file, 'w+', newline='', encoding='utf-8') as output_file:
         writer = csv.writer(output_file)
-        writer.writerow(header)
+        # writer.writerow(header)
         
         for file in files:
             await io_files(file, writer)
