@@ -6,6 +6,5 @@ from function.reports import reporting
 
 if __name__ == '__main__':
     files, report = get_argument_values().values()
-    print(files, report)
-    asyncio.run(combining_files(files), debug=True)
-    asyncio.run(reporting(report), debug=True)
+    asyncio.run(combining_files(files))
+    asyncio.run(reporting(report))

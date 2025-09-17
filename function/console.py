@@ -19,6 +19,7 @@ def get_argument_values() -> dict[str, str]:
         help='str: Определяет формат отчета. По умолчанию равен\
               student-performance',
         type=str,
+        nargs='+',
         default='student-performance'
         )
     
