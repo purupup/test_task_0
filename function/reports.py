@@ -6,15 +6,18 @@ async def reporting(reports: list, file: str = r"./out.csv") -> None:
     funcs = list()
 
     if "student-performance" in reports:
-        funcs.append(student_performance(file))
+        report_data = await student_performance(file)
+        print(report_data)
+        funcs.append(build_table(report_data))
 
 
     for func in funcs:
         await func
 
 
-async def student_performance(file: str) -> None:
+async def student_performance(file: str) -> tuple[dict[str, list[str]], list[str]]:
     result_data = dict()
+    headers =['student_name', 'grade']
 
     with open(file, 'r', newline='', encoding='utf-8') as f:
         reader = csv.reader(f)
@@ -39,16 +42,12 @@ async def student_performance(file: str) -> None:
             reverse=True
             )
         )
-    await build_table(
-        result_data,
-        ['student_name', 'grade']
-        )
+    return (result_data, headers)
+
 
 async def build_table(
-        table_data: dict[str, list[str]],
-        headers: list[str]
-        ) -> None:
-    
+        report_data: tuple[dict[str, list[str]],list[str]]) -> None:
+    table_data, headers = report_data
     table = [[key, *values] for key, values in table_data.items()]
     print(tabulate(
         table,

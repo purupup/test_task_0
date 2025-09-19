@@ -1,3 +1,3 @@
-from function import console
-from function import files
-from function import reports
+from function.console import *
+from function.files import *
+from function.reports import *
