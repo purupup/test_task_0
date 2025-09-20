@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-def get_argument_values() -> dict[str, str]:
+def get_argument_values() -> dict[str, list[str]]:
     """
     Возвращает значения аргументов, переданных при вызове функции в консоли.
     """

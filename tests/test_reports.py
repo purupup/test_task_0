@@ -1,58 +1,33 @@
 import pytest
-import asyncio
 from function.reports import *
 
 
 class TestReports:
     @pytest.mark.asyncio
-    async def test_student_performance(self):
+    async def test_student_performance(self, set_test_data):
         test_file = './test_task_0/tests/test_report_file.csv'
-        result = (
-            {'Власова Алина': [5.0], 'Иванов Алексей': [5.0],
-             'Калинина Ольга': [5.0], 'Лебедева Виктория': [5.0],
-             'Миронова Вероника': [5.0], 'Орлова Дарья': [5.0],
-             'Семенова Елена': [5.0], 'Смирнов Дмитрий': [5.0],
-             'Степанов Игорь': [5.0], 'Яковлев Илья': [5.0],
-             'Белов Станислав': [4.5], 'Григорьева Софья': ['4.0'],
-             'Жуков Александр': ['4.0'], 'Захарова Дарья': ['4.0'],
-             'Игнатьев Роман': ['4.0'], 'Максимов Кирилл': ['4.0'],
-             'Морозова Екатерина': ['4.0'], 'Новиков Артем': ['4.0'],
-             'Петрова Мария': ['4.0'], 'Савельева Анастасия': ['4.0'],
-             'Соколов Павел': ['4.0'], 'Титов Владислав': ['4.0'],
-             'Чернова Виталина': ['4.0'], 'Гусев Артур': ['3.0'],
-             'Дорофеев Никита': ['3.0'], 'Крылов Антон': ['3.0'],
-             'Кудрявцев Глеб': ['3.0'], 'Кузнецова Анна': ['3.0'],
-             'Федоров Максим': ['3.0'], 'Фомина Ксения': ['3.0']
-            },
-            ['student_name', 'grade']
-        )
-
         func_result = await student_performance(test_file)
-        assert result == func_result
+        data_dict, data_list = set_test_data
+        data = (
+            {key:list(map(lambda x: float(x), values)) for key, values in data_dict.items()},
+            data_list
+        )
+        assert data == func_result
 
 
     @pytest.mark.asyncio
-    async def test_build_table(capsys):
-        input_data = (
-            {'Власова Алина': ['5.0'], 'Иванов Алексей': ['5.0'],
-             'Калинина Ольга': ['5.0'], 'Лебедева Виктория': ['5.0'],
-             'Миронова Вероника': ['5.0'], 'Орлова Дарья': ['5.0'],
-             'Семенова Елена': ['5.0'], 'Смирнов Дмитрий': ['5.0'],
-             'Степанов Игорь': ['5.0'], 'Яковлев Илья': ['5.0'],
-             'Белов Станислав': ['4.5'], 'Григорьева Софья': ['4.0'],
-             'Жуков Александр': ['4.0'], 'Захарова Дарья': ['4.0'],
-             'Игнатьев Роман': ['4.0'], 'Максимов Кирилл': ['4.0'],
-             'Морозова Екатерина': ['4.0'], 'Новиков Артем': ['4.0'],
-             'Петрова Мария': ['4.0'], 'Савельева Анастасия': ['4.0'],
-             'Соколов Павел': ['4.0'], 'Титов Владислав': ['4.0'],
-             'Чернова Виталина': ['4.0'], 'Гусев Артур': ['3.0'],
-             'Дорофеев Никита': ['3.0'], 'Крылов Антон': ['3.0'],
-             'Кудрявцев Глеб': ['3.0'], 'Кузнецова Анна': ['3.0'],
-             'Федоров Максим': ['3.0'], 'Фомина Ксения': ['3.0'],
-            },
-            ['student_name', 'grade']
-        )
-        await build_table(input_data)
+    async def test_build_table(self, capsys, set_test_data, set_output_data):
+        await build_table(set_test_data)
         captured = capsys.readouterr()
-        assert captured.out == 'hello'
+        assert captured.out == set_output_data
+
+    @pytest.mark.asyncio
+    async def test_reporting(self, capsys, set_output_data):
+        reports_list = ['student-performance',]
+        await reporting(
+            reports=reports_list,
+            file=r'./test_task_0/tests/test_out.csv'
+        )
+        captured = capsys.readouterr()
+        assert captured.out == set_output_data
 

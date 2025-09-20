@@ -2,12 +2,11 @@ import csv
 from tabulate import tabulate
 
 
-async def reporting(reports: list, file: str = r"./out.csv") -> None:
+async def reporting(reports: list[str], file: str = r"./out.csv") -> None:
     funcs = list()
 
     if "student-performance" in reports:
         report_data = await student_performance(file)
-        print(report_data)
         funcs.append(build_table(report_data))
 
 
